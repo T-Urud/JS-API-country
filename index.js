@@ -1,4 +1,5 @@
 const countriesContainer = document.querySelector(".countries-container");
+const rangeValue = document.getElementById("rangeValue");
 let countries = [];
 
 async function fetchCountries() {
@@ -10,7 +11,9 @@ async function fetchCountries() {
 }
 
 function countriesDisplay() {
-  countriesContainer.innerHTML = countries
+  rangeValueDisplay();
+  let filteredCountries = countryNameFilter();
+  countriesContainer.innerHTML = filteredCountries
     .map((country) => {
       return `
         <article class="countryCard">
@@ -25,13 +28,20 @@ function countriesDisplay() {
 }
 fetchCountries();
 
-inputSearch.addEventListener("input", (e) => {
-  console.log(e.target.value);
-  country.name.includes(inputSearch.value);
-});
+function countryNameFilter() {
+  let countrySearch = inputSearch.value.toLowerCase();
+  return countries.filter((country) =>
+    country.name.common.toLowerCase().includes(countrySearch)
+  );
+}
+inputSearch.addEventListener("input", countriesDisplay);
 
-// 5 - Récupérer ce qui est tapé dans l'input et filtrer (avant le map) les données
-// coutry.name.includes(inputSearch.value);
+function rangeValueDisplay() {
+  inputRange.addEventListener("input", () => {
+    rangeValue.textContent = inputRange.value;
+    countries.slice(inputRange.value);
+  });
+}
 
 // 6 - Avec la méthode Slice gérer le nombre de pays affichés (inputRange.value)
 
