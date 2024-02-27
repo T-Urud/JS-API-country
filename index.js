@@ -11,8 +11,9 @@ async function fetchCountries() {
 }
 
 function countriesDisplay() {
-  rangeValueDisplay();
-  let filteredCountries = countryNameFilter();
+  // rangeValueDisplay();
+  const filteredCountries = countryNameFilter();
+  const slicedCountries = filteredCountries.slice(0, inputRange.value);
   countriesContainer.innerHTML = filteredCountries
     .map((country) => {
       return `
@@ -26,7 +27,6 @@ function countriesDisplay() {
     })
     .join("");
 }
-fetchCountries();
 
 function countryNameFilter() {
   let countrySearch = inputSearch.value.toLowerCase();
@@ -39,10 +39,11 @@ inputSearch.addEventListener("input", countriesDisplay);
 function rangeValueDisplay() {
   inputRange.addEventListener("input", () => {
     rangeValue.textContent = inputRange.value;
-    countries.slice(inputRange.value);
+    countriesDisplay();
   });
 }
 
+fetchCountries();
 // 6 - Avec la méthode Slice gérer le nombre de pays affichés (inputRange.value)
 
 // 7 - Gérer les 3 boutons pour trier (méthode sort()) les pays

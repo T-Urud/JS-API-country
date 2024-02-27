@@ -21,6 +21,7 @@ input:focus {
 input[type="range"] {
   width: 250px;
   margin: 0 10px 10px 0;
+  cursor: grab;
 }
 .range-container span {
   font-size: 1.2rem;
