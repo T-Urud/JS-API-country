@@ -30,22 +30,21 @@ input[type="range"] {
 .countries-container{
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  text-align: center;
   gap: 1rem;
 }
 .countryCard{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  flex: 1 0 20%;
+  min-width: 160px;
   background: rgba(233, 233, 233, 0.542);
   border-radius: 2rem;
   width: 18rem;
-  padding: 0.5rem 0;
+  padding: 1rem;
 }
-.countryCard img{
-  max-width: 50%;
-  height: 40%;
+img{
+  width: 160px;
+  height: 100px;
+  object-fit: cover;
 }
 
 h3{

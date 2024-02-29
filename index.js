@@ -1,6 +1,7 @@
 const countriesContainer = document.querySelector(".countries-container");
-const rangeValue = document.getElementById("rangeValue");
+const btnSort = document.querySelectorAll(".btnSort");
 let countries = [];
+let sortMethod = "maxToMin";
 
 async function fetchCountries() {
   await fetch("https://restcountries.com/v3.1/all").then((res) =>
@@ -11,39 +12,56 @@ async function fetchCountries() {
 }
 
 function countriesDisplay() {
-  // rangeValueDisplay();
-  const filteredCountries = countryNameFilter();
-  const slicedCountries = filteredCountries.slice(0, inputRange.value);
-  countriesContainer.innerHTML = filteredCountries
+  countriesContainer.innerHTML = countries
+    .filter((country) =>
+      country.name.common
+        .toLowerCase()
+        .includes(inputSearch.value.toLowerCase())
+    )
+    .sort((a, b) => {
+      // RETURN très important dans le sort
+      if (sortMethod === "maxToMin") {
+        return b.population - a.population;
+      } else if (sortMethod === "minToMax") {
+        return a.population - b.population;
+      } else if (sortMethod === "alpha") {
+        return a.name.common.localeCompare(b.name.common);
+      }
+    })
+    .slice(0, inputRange.value)
     .map((country) => {
       return `
         <article class="countryCard">
-          <img src="${country.flags.png}" alt="${country.flags.alt}">
+          <img src="${country.flags.svg}" alt="${country.flags.alt}">
           <h3>${country.name.common}</h3>
           <p id="capitalCity">Capital: ${country.capital}</p>
-          <p>Population: ${country.population}</p>
+          <p>Population: ${country.population.toLocaleString()}</p>
         </article>
       `;
     })
     .join("");
 }
 
-function countryNameFilter() {
-  let countrySearch = inputSearch.value.toLowerCase();
-  return countries.filter((country) =>
-    country.name.common.toLowerCase().includes(countrySearch)
-  );
-}
+window.addEventListener("load", fetchCountries);
 inputSearch.addEventListener("input", countriesDisplay);
 
-function rangeValueDisplay() {
-  inputRange.addEventListener("input", () => {
-    rangeValue.textContent = inputRange.value;
+inputRange.addEventListener("input", () => {
+  rangeValue.textContent = inputRange.value;
+  countriesDisplay();
+});
+
+btnSort.forEach((btn) => {
+  btn.addEventListener("click", (e) => {
+    sortMethod = e.target.id;
     countriesDisplay();
   });
-}
+});
 
-fetchCountries();
-// 6 - Avec la méthode Slice gérer le nombre de pays affichés (inputRange.value)
-
-// 7 - Gérer les 3 boutons pour trier (méthode sort()) les pays
+// function countryNameFilter() {
+//   let countrySearch = inputSearch.value.toLowerCase();
+//   return countries.filter((country) =>
+//     country.name.common.toLowerCase().includes(countrySearch)
+//   );
+// }
+//   Pas obligé de faire une fct à chaque fois, (on peut directement ecrire avant map), ça peut ralentir le navigateur et crash la page
+// toLowerCase() pour tout mettre en minuscules (pour comparer des choses =) même si tapé en maj dans input
